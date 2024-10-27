@@ -1,0 +1,81 @@
+{% extends 'base_manage.html' %}
+
+{% block content %}
+<main id="main" class="main">
+    <div class="pagetitle mb-4">
+        <h1 class="text-center">Nhắn tin với {{ receiver.tai_khoan }}</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'trangchu' %}">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Tin nhắn</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <div class="chat-box border rounded p-3 mb-4" style="max-height: 400px; overflow-y: auto; background-color: #f8f9fa;">
+        {% for message in messages %}
+            <div class="message mb-3 p-3 rounded {% if message.sender.id == request.session.taikhoan_id %}sent{% else %}received{% endif %}" style="max-width: 70%;">
+                <strong>{{ message.sender.tai_khoan }}:</strong>
+                <p class="mb-0">{{ message.content }}</p>
+                <small class="text-muted d-block">{{ message.timestamp }}</small>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <form method="POST" class="input-group">
+        {% csrf_token %}
+        <textarea name="content" rows="3" placeholder="Nhập tin nhắn vào đây" class="form-control" required></textarea>
+        <button type="submit" class="btn btn-primary ms-2">Gửi</button>
+    </form>
+</main>
+
+<!-- Bootstrap CSS (Nếu chưa có trong base template) -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+
+<style>
+    /* Tinh chỉnh các thông số CSS cho giao diện chat */
+    .chat-box {
+        background-color: #f8f9fa; /* Nền hộp chat sáng */
+        border: 1px solid #ced4da; /* Đường viền nhẹ */
+        display: flex;
+        flex-direction: column; /* Để các tin nhắn xếp dọc */
+        gap: 10px; /* Khoảng cách giữa các tin nhắn */
+    }
+
+    .message {
+        border-radius: 10px;
+        padding: 15px;
+        width: 100%; /* Đảm bảo tin nhắn chiếm toàn bộ chiều rộng */
+    }
+
+    .sent {
+        background-color: #d4edda !important; /* Màu nền cho tin nhắn của người gửi (màu xanh lá nhạt) */
+        color: #155724; /* Màu chữ cho tin nhắn đã gửi */
+        text-align: right; /* Căn phải cho tin nhắn đã gửi */
+        margin-left: auto; /* Đẩy tin nhắn sang bên phải */
+    }
+
+    .received {
+        background-color: #e9ecef !important; /* Màu nền cho tin nhắn của người nhận */
+        color: #343a40; /* Màu chữ tối cho tin nhắn của người nhận */
+        text-align: left; /* Căn trái cho tin nhắn đã nhận */
+        margin-right: auto; /* Đẩy tin nhắn sang bên trái */
+    }
+
+    .text-muted {
+        color: #6c757d !important; /* Màu chữ nhạt cho timestamp */
+    }
+
+    .input-group {
+        margin-top: 10px; /* Khoảng cách giữa hộp chat và form gửi tin nhắn */
+    }
+
+    textarea {
+        border-radius: 5px; /* Bo tròn cho textarea */
+    }
+
+    button {
+        border-radius: 5px; /* Bo tròn cho nút gửi */
+    }
+</style>
+{% endblock %}

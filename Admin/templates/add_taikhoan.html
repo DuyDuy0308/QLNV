@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Thêm Tài Khoản</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'trangchu' %}">Home</a></li>
+                <li class="breadcrumb-item">Tài Khoản</li>
+                <li class="breadcrumb-item active">Thêm</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Thêm Tài Khoản Mới</h5>
+
+                        <!-- Form for adding Taikhoan -->
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row mb-3">
+                                <label for="inputTaiKhoan" class="col-sm-2 col-form-label">Tài Khoản</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="tai_khoan" class="form-control" id="inputTaiKhoan" value="{{ form.tai_khoan.value|default_if_none:'' }}" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputMatKhau" class="col-sm-2 col-form-label">Mật Khẩu</label>
+                                <div class="col-sm-10">
+                                    <input type="password" name="mat_khau" class="form-control" id="inputMatKhau" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputPhanQuyen" class="col-sm-2 col-form-label">Phân Quyền</label>
+                                <div class="col-sm-10">
+                                    <select name="phan_quyen" class="form-control" id="inputPhanQuyen" required>
+                                        <option value="" selected disabled>Chọn quyền</option>
+                                        {% for key, value in form.phan_quyen.field.choices %}
+                                            <option value="{{ key }}" {% if form.phan_quyen.value == key %}selected{% endif %}>{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputKhachHang" class="col-sm-2 col-form-label">Khách Hàng (Optional)</label>
+                                <div class="col-sm-10">
+                                    <select name="khachhang" class="form-control" id="inputKhachHang">
+                                        <option value="" selected>Chọn khách hàng</option>
+                                        {% for kh in form.khachhang.field.queryset %}
+                                            <option value="{{ kh.id }}" {% if form.khachhang.value == kh.id %}selected{% endif %}>{{ kh.ho_va_ten }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Thêm Tài Khoản</button>
+                                <button type="reset" class="btn btn-secondary">Reset</button>
+                            </div>
+                        </form><!-- End Form -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+{% endblock %}

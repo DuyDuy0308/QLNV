@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Sửa tên công ty bảo hiểm</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <form method="POST"> <!-- Sử dụng enctype để upload file -->
+            {% csrf_token %}
+            
+            <!-- Trường tiêu đề -->
+            <div class="form-group">
+                <label for="title">Tên công ty:</label>
+                <input type="text" class="form-control" id="tencongtynew" name="tencongtynew" value="{{ pkbhs.Ten_cong_ty }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        </form>
+    </section>
+
+</main><!-- End #main -->
+
+{% endblock %}

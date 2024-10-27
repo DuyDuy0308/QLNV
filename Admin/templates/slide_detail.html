@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xem Slide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        #slide-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .slide {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .image-box {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div id="slide-container">
+    {% if slide_content %}
+        {% for element in slide_content %}
+            <div class="slide">
+                {% if element.type == 'text' %}
+                    <p>{{ element.content }}</p>
+                {% elif element.type == 'image' %}
+                    <img src="{{ element.content }}" class="image-box" alt="Slide Image">
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Không có nội dung nào để hiển thị.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

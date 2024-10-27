@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main id="main" class="main">
+    <div class="container mt-5">
+        <div class="lesson-section mb-4 p-4 bg-white rounded shadow-sm">
+            <h1 class="lesson-title">{{ lesson.title }}</h1>
+            <p class="lesson-description">{{ lesson.description }}</p>
+        </div>
+
+        <!-- Display video if available -->
+        {% if lesson.video %}
+        <div class="lesson-section mb-4 p-4 bg-white rounded shadow-sm">
+            <h3>Video</h3>
+            <video controls class="w-100">
+                <source src="{{ lesson.video.url }}" type="video/mp4">
+                Trình duyệt của bạn không hỗ trợ video.
+            </video>
+        </div>
+        {% endif %}
+
+        <!-- Display image if available -->
+        {% if lesson.image %}
+        <div class="lesson-section mb-4 p-4 bg-white rounded shadow-sm">
+            <h3>Hình ảnh</h3>
+            <img src="{{ lesson.image.url }}" alt="{{ lesson.title }}" class="img-fluid">
+        </div>
+        {% endif %}
+
+    </div>
+</main><!-- End #main -->
+{% endblock %}

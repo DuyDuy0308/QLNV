@@ -1,0 +1,82 @@
+{% extends 'base_manage.html' %}
+
+{% block content %}
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Thông Tin Cá Nhân</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'trangchu' %}">Home</a></li>
+                <li class="breadcrumb-item active">Thông Tin</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card shadow-sm border-0 rounded-lg mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0">{{ khachhang.ho_va_ten }}</h4>
+                    </div>
+                    <div class="card-body">
+
+                        {% if taikhoan %}
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label"><strong><i class="bi bi-person-circle"></i> Tài Khoản:</strong></label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext">{{ taikhoan.tai_khoan }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label"><strong><i class="bi bi-shield-lock"></i> Phân Quyền:</strong></label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext">{{ taikhoan.phan_quyen }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if khachhang %}
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label"><strong><i class="bi bi-calendar"></i> Ngày Sinh:</strong></label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext">{{ khachhang.ngay_sinh|date:"d/m/Y" }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label"><strong><i class="bi bi-phone"></i> Số Điện Thoại:</strong></label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext">{{ khachhang.so_dien_thoai }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label"><strong><i class="bi bi-house-door"></i> Địa Chỉ:</strong></label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext">{{ khachhang.dia_chi }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label"><strong><i class="bi bi-star"></i> Trạng Thái VIP:</strong></label>
+                            <div class="col-sm-8">
+                                <p class="form-control-plaintext">{{ khachhang.IS_VIP|yesno:"VIP,Thường" }}</p>
+
+                                <!-- Form to toggle VIP status -->
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm {% if khachhang.IS_VIP %}btn-danger{% else %}btn-success{% endif %}">
+                                        {% if khachhang.IS_VIP %}Chuyển thành Thường{% else %}Chuyển thành VIP{% endif %}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+{% endblock %}

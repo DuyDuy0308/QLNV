@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiết Kế Slide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #slide-editor {
+            width: 800px;
+            height: 600px;
+            border: 1px solid #ccc;
+            position: relative;
+            overflow: hidden;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+        }
+        .draggable {
+            position: absolute;
+            border: 1px solid #000;
+            padding: 10px;
+            cursor: move;
+        }
+        .text-box {
+            background-color: #fff;
+        }
+        .image-box {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .resize-handle {
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            cursor: nwse-resize;
+        }
+        #controls {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        #slide-selector {
+            margin: 20px auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="controls">
+        <input type="text" id="fileNameInput" placeholder="Nhập tên file" />
+        <button onclick="addText()">Chèn Văn Bản</button>
+        <input type="file" id="imageInput" accept="image/*" onchange="addImage(event)">
+        <button onclick="addSlide()">Thêm Slide Mới</button>
+        <button onclick="saveSlides()">Lưu Slide</button>
+    </div>
+
+    <div id="slide-selector">
+        <select id="slideDropdown" onchange="selectSlide(event)">
+            <option value="" disabled selected>Chọn Slide</option>
+        </select>
+    </div>
+
+    <div id="slide-editor">
+        <!-- Nội dung Slide sẽ được thêm vào đây -->
+    </div>
+
+    <script>
+        let slideEditor = document.getElementById('slide-editor');
+        let slides = [];
+        let currentSlideIndex = -1;
+
+        function addText() {
+            let textBox = document.createElement('div');
+            textBox.className = 'draggable text-box';
+            textBox.contentEditable = true;
+            textBox.innerText = 'Nhập văn bản ở đây';
+            textBox.style.left = '50px';
+            textBox.style.top = '50px';
+            slideEditor.appendChild(textBox);
+            makeDraggable(textBox);
+        }
+
+        function addImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = e.target.result;
+                    imgElement.className = 'draggable image-box';
+                    imgElement.style.left = '200px';
+                    imgElement.style.top = '200px';
+
+                    const resizeHandle = document.createElement('div');
+                    resizeHandle.className = 'resize-handle';
+                    imgElement.appendChild(resizeHandle);
+                    
+                    slideEditor.appendChild(imgElement);
+                    makeDraggable(imgElement);
+                    makeResizable(imgElement, resizeHandle);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function addSlide() {
+            // Lưu dữ liệu slide hiện tại
+            if (currentSlideIndex !== -1) {
+                saveCurrentSlide();
+            }
+
+            // Xóa nội dung slide editor
+            slideEditor.innerHTML = '';
+            currentSlideIndex = slides.length;
+            slides.push([]);  // Thêm một mảng slide mới
+
+            // Cập nhật dropdown
+            updateSlideDropdown();
+        }
+
+        function saveCurrentSlide() {
+            const slideContent = [];
+            const elements = slideEditor.children;
+
+            for (let i = 0; i < elements.length; i++) {
+                const element = elements[i];
+                if (element.classList.contains('draggable')) {
+                    slideContent.push({
+                        type: element.classList.contains('text-box') ? 'text' : 'image',
+                        content: element.classList.contains('text-box') ? element.innerText : element.src,
+                        left: element.style.left,
+                        top: element.style.top,
+                        width: element.clientWidth,
+                        height: element.clientHeight
+                    });
+                }
+            }
+            slides[currentSlideIndex] = slideContent;  // Lưu nội dung slide
+        }
+
+        function selectSlide(event) {
+            saveCurrentSlide();  // Lưu slide hiện tại trước khi chuyển đổi
+            const index = event.target.value;
+            currentSlideIndex = index;
+            
+            // Xóa nội dung slide editor
+            slideEditor.innerHTML = '';
+
+            // Tải slide đã chọn
+            const selectedSlide = slides[index];
+            selectedSlide.forEach(element => {
+                if (element.type === 'text') {
+                    const textBox = document.createElement('div');
+                    textBox.className = 'draggable text-box';
+                    textBox.contentEditable = true;
+                    textBox.innerText = element.content;
+                    textBox.style.left = element.left;
+                    textBox.style.top = element.top;
+                    textBox.style.width = element.width + 'px';
+                    textBox.style.height = element.height + 'px';
+                    slideEditor.appendChild(textBox);
+                    makeDraggable(textBox);
+                } else if (element.type === 'image') {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = element.content;
+                    imgElement.className = 'draggable image-box';
+                    imgElement.style.left = element.left;
+                    imgElement.style.top = element.top;
+                    imgElement.style.width = element.width + 'px';
+                    imgElement.style.height = element.height + 'px';
+
+                    const resizeHandle = document.createElement('div');
+                    resizeHandle.className = 'resize-handle';
+                    imgElement.appendChild(resizeHandle);
+                    slideEditor.appendChild(imgElement);
+                    makeDraggable(imgElement);
+                    makeResizable(imgElement, resizeHandle);
+                }
+            });
+        }
+
+        function updateSlideDropdown() {
+            const dropdown = document.getElementById('slideDropdown');
+            dropdown.innerHTML = '<option value="" disabled selected>Chọn Slide</option>';
+            slides.forEach((slide, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `Slide ${index + 1}`;
+                dropdown.appendChild(option);
+            });
+        }
+
+        function makeDraggable(element) {
+            let offsetX, offsetY;
+
+            element.addEventListener('mousedown', function(e) {
+                offsetX = e.clientX - parseInt(window.getComputedStyle(element).left);
+                offsetY = e.clientY - parseInt(window.getComputedStyle(element).top);
+                document.addEventListener('mousemove', mouseMoveHandler);
+                document.addEventListener('mouseup', mouseUpHandler);
+            });
+
+            function mouseMoveHandler(e) {
+                element.style.left = (e.clientX - offsetX) + 'px';
+                element.style.top = (e.clientY - offsetY) + 'px';
+            }
+
+            function mouseUpHandler() {
+                document.removeEventListener('mousemove', mouseMoveHandler);
+                document.removeEventListener('mouseup', mouseUpHandler);
+            }
+        }
+
+        function makeResizable(imgElement, resizeHandle) {
+            let originalWidth, originalHeight, originalMouseX, originalMouseY;
+
+            resizeHandle.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+                originalWidth = imgElement.clientWidth;
+                originalHeight = imgElement.clientHeight;
+                originalMouseX = e.clientX;
+                originalMouseY = e.clientY;
+
+                document.addEventListener('mousemove', resizeMouseMove);
+                document.addEventListener('mouseup', resizeMouseUp);
+            });
+
+            function resizeMouseMove(e) {
+                const newWidth = originalWidth + (e.clientX - originalMouseX);
+                const newHeight = originalHeight + (e.clientY - originalMouseY);
+
+                imgElement.style.width = newWidth + 'px';
+                imgElement.style.height = newHeight + 'px';
+            }
+
+            function resizeMouseUp() {
+                document.removeEventListener('mousemove', resizeMouseMove);
+                document.removeEventListener('mouseup', resizeMouseUp);
+            }
+        }
+
+        function getCSRFToken() {
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            return csrfToken;
+        }
+
+        function saveSlides() {
+            saveCurrentSlide();
+
+            const fileName = document.getElementById('fileNameInput').value.trim();
+            if (!fileName) {
+                alert('Vui lòng nhập tên file.');
+                return;
+            }
+
+            const csrfToken = getCSRFToken();
+
+            fetch('/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify({ file_name: fileName, slides: slides }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Lỗi khi lưu slide.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Slide đã được lưu thành công: ' + data.pdf_url);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi lưu slide.');
+            });
+        }
+    </script>
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+</body>
+</html>

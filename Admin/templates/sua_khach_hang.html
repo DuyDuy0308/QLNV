@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Sửa thông tin khách hàng</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- General Form Elements -->
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="khachhang_id" value="{{ khachhang.id }}">
+                            <div class="row mb-3" style="margin-top: 15px;">
+                                <label for="ho_va_ten" class="col-sm-2 col-form-label">Họ và tên</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="ho_va_ten" name="ho_va_ten" value="{{ khachhang.ho_va_ten }}" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="ngay_sinh" class="col-sm-2 col-form-label">Ngày tháng năm sinh</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" id="ngay_sinh" name="ngay_sinh" value="{{ khachhang.ngay_sinh|date:'Y-m-d' }}" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="so_dien_thoai" class="col-sm-2 col-form-label">Số điện thoại</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai" value="{{ khachhang.so_dien_thoai }}" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="dia_chi" class="col-sm-2 col-form-label">Địa chỉ</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="dia_chi" name="dia_chi" value="{{ khachhang.dia_chi }}" required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Công ty bảo hiểm</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select" name="cong_ty_bao_hiem" multiple>
+                                        <option value="">Chọn công ty bảo hiểm</option>
+                                        {% for cong_ty in cong_ty_bao_hiem_list %}
+                                        <option value="{{ cong_ty.id }}" {% if cong_ty in khachhang.cong_ty_bao_hiem.all %}selected{% endif %}>{{ cong_ty.Ten_cong_ty }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <fieldset class="row mb-3">
+                                <legend class="col-form-label col-sm-2 pt-0">Tham gia bảo hiểm</legend>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tham_gia_bao_hiem" id="tham_gia_bao_hiem1" value="true" {% if khachhang.tham_gia_bao_hiem %}checked{% endif %}>
+                                        <label class="form-check-label" for="tham_gia_bao_hiem1">
+                                            Đã tham gia
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tham_gia_bao_hiem" id="tham_gia_bao_hiem2" value="false" {% if not khachhang.tham_gia_bao_hiem %}checked{% endif %}>
+                                        <label class="form-check-label" for="tham_gia_bao_hiem2">
+                                            Chưa tham gia
+                                        </label>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="row mb-3">
+                                <label for="chi_tiet_bao_hiem" class="col-sm-2 col-form-label">Chi tiết bảo hiểm</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" style="height: 100px" name="chi_tiet_bao_hiem" id="chi_tiet_bao_hiem">{{ khachhang.chi_tiet_bao_hiem }}</textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <label for="is_vip" class="col-sm-2 col-form-label">Khách hàng VIP</label>
+                                <div class="col-sm-10">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="is_vip" name="is_vip" {% if khachhang.IS_VIP %}checked{% endif %}>
+                                        <label class="form-check-label" for="is_vip">Bật/Tắt VIP</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Đánh giá</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select" name="danh_gia" required>
+                                        <option value="">Chọn đánh giá</option>
+                                        {% for dg in danh_gia_list %}
+                                        <option value="{{ dg.id }}" {% if dg.id == khachhang.danh_gia.id %}selected{% endif %}>{{ dg.Loai_KH }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main><!-- End #main -->
+{% endblock %}

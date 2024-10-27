@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Đổi mật khẩu cho {{ taikhoan.tai_khoan }}</h1>
+    </div>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Mật khẩu mới</h5>
+
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row mb-3">
+                                <label for="mat_khau" class="col-sm-2 col-form-label">Mật khẩu mới</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" name="mat_khau" id="mat_khau" required>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Cập nhật mật khẩu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

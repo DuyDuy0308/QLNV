@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main id="main" class="main">
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">Tải lên bài học</h1>
+
+        <!-- Card for uploading the lesson -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Lesson Title Input -->
+                    <div class="form-group mb-3">
+                        <label for="title" class="form-label">Tiêu đề bài học</label>
+                        <input type="text" id="title" name="title" class="form-control" placeholder="Nhập tiêu đề" required>
+                    </div>
+
+                    <!-- Lesson Description Input -->
+                    <div class="form-group mb-3">
+                        <label for="description" class="form-label">Mô tả</label>
+                        <textarea id="description" name="description" class="form-control" rows="4" placeholder="Nhập mô tả bài học" required></textarea>
+                    </div>
+
+                    <!-- VIP Status Checkbox -->
+                    <div class="form-group form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="vip_only" name="vip_only">
+                        <label class="form-check-label" for="vip_only">Chỉ dành cho VIP</label>
+                    </div>
+
+                    <!-- Video Upload Input -->
+                    <div class="form-group mb-3">
+                        <label for="video" class="form-label">Tải lên Video</label>
+                        <input type="file" id="video" name="video" class="form-control">
+                        <small class="form-text text-muted">Định dạng được hỗ trợ: mp4, avi.</small>
+                    </div>
+
+                    <!-- Image Upload Input -->
+                    <div class="form-group mb-3">
+                        <label for="image" class="form-label">Tải lên Hình ảnh</label>
+                        <input type="file" id="image" name="image" class="form-control">
+                        <small class="form-text text-muted">Định dạng được hỗ trợ: jpg, png.</small>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary px-5">Tải lên</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

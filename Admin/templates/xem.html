@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Thông tin lần gặp của {{ khachhang.ho_va_ten }}</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-12"> <!-- Sử dụng col-12 để đảm bảo toàn bộ chiều rộng -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Lịch sử gặp gỡ</h5>
+
+                        <!-- Biểu mẫu thêm lần gặp mới -->
+                        <form method="post" action="{% url 'them_lan_gap' khachhang.id %}" class="mb-3" onsubmit="showLoading()">
+                            {% csrf_token %}
+                            <div class="input-group mb-3">
+                                <textarea name="lan_gap" class="form-control" placeholder="Nhập ghi chú cho lần gặp" required></textarea>
+                                <button class="btn btn-primary" type="submit">Lưu</button>
+                            </div>
+                        </form>
+
+                        <div id="loading" style="display:none;" class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Lần gặp</th>
+                                    <th>Ghi chú</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lan_gap in lan_gap_list %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <form method="post" action="{% url 'sua_lan_gap' lan_gap.id %}" onsubmit="showLoading()">
+                                            {% csrf_token %}
+                                            <input type="text" name="noi_dung" value="{{ lan_gap.noi_dung }}" required class="form-control">
+                                            <button type="submit" class="btn btn-success btn-sm mt-2">Lưu</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'xoa_lan_gap' lan_gap.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa lần gặp này?');">Xóa</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center">Chưa có thông tin về các lần gặp.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main><!-- End #main -->
+
+<script>
+    function showLoading() {
+        document.getElementById('loading').style.display = 'block';
+    }
+
+    document.getElementById('add_lan_gap_btn').addEventListener('click', function() {
+        var container = document.getElementById('lan_gap_container');
+        var textarea = document.createElement('textarea');
+        textarea.className = 'form-control mb-2'; // Thêm margin dưới textarea
+        textarea.name = 'lan_gap'; // Đặt tên cho textarea để có thể xử lý ở server
+        textarea.placeholder = 'Nhập ghi chú cho lần gặp mới'; // Placeholder cho textarea mới
+        container.appendChild(textarea); // Thêm textarea vào container
+    });
+</script>
+
+<style>
+    /* CSS tùy chỉnh để cải thiện hiển thị trên di động */
+    @media (max-width: 576px) {
+        .input-group .form-control {
+            min-height: 38px; /* Điều chỉnh chiều cao cho di động */
+        }
+        .btn {
+            width: 100%; /* Đảm bảo nút đầy chiều rộng trên di động */
+            margin-bottom: 5px; /* Thêm khoảng cách giữa các nút */
+        }
+    }
+</style>
+{% endblock %}

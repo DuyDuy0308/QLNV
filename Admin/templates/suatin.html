@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Sửa tin tức</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        {% if messages %}
+            <div class="alert alert-success" role="alert">
+                {% for message in messages %}
+                    {{ message }}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form method="POST" enctype="multipart/form-data"> <!-- Sử dụng enctype để upload file -->
+            {% csrf_token %}
+            
+            <!-- Trường tiêu đề -->
+            <div class="form-group">
+                <label for="title">Tiêu đề:</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ news.title }}" required>
+            </div>
+
+            <!-- Trường nội dung -->
+            <div class="form-group">
+                <label for="content">Nội dung:</label>
+                <textarea class="form-control" id="content" name="content" required>{{ news.content }}</textarea>
+            </div>
+
+            <!-- Hiển thị media hiện tại -->
+            <div class="form-group">
+                <label>Media hiện tại:</label>
+                <div>
+                    {% if news.is_image %}
+                        <img src="{{ news.media.url }}" alt="{{ news.title }}" width="300" class="img-thumbnail">
+                    {% elif news.is_video %}
+                        <video width="300" controls>
+                            <source src="{{ news.media.url }}" type="video/mp4">
+                        </video>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Trường upload media mới -->
+            <div class="form-group">
+                <label for="media">Chọn ảnh/Video mới (nếu có):</label>
+                <input type="file" class="form-control" id="media" name="media">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        </form>
+    </section>
+
+</main><!-- End #main -->
+
+{% endblock %}

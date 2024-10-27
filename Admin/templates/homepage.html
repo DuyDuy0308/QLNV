@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trang chủ</title>
+</head>
+<body>
+    <h1>Đăng tin tức</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Đăng tin</button>
+    </form>
+
+    <h2>Tin tức đã đăng</h2>
+    <ul>
+        {% for news in news_list %}
+            <li>
+                <h3>{{ news.title }}</h3>
+                <p>{{ news.content }}</p>
+                {% if news.image %}
+                    <img src="{{ news.image.url }}" alt="{{ news.title }}" width="300">
+                {% endif %}
+                {% if news.video %}
+                    <video width="300" controls>
+                        <source src="{{ news.video.url }}" type="video/mp4">
+                    </video>
+                {% endif %}
+                <p>Đăng lúc: {{ news.created_at }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

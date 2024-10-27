@@ -1,0 +1,252 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- Favicons -->
+<link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+<link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+<!-- Google Fonts -->
+<link href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+<link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+<link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
+<link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+<link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+<link href="{% static 'assets/vendor/simple-datatables/style.css' %}" rel="stylesheet">
+<link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="{% url 'trangchu' %}" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span class="d-none d-lg-block">Quản lý khách hàng</span>
+      </a>
+      
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+    {% if messages %}
+    <div class="container">
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+        <li class="nav-item dropdown">
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="notification-item">
+              <i class="bi bi-x-circle text-danger"></i>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="notification-item">
+              <i class="bi bi-check-circle text-success"></i>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="notification-item">
+              <i class="bi bi-info-circle text-primary"></i>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+          </ul><!-- End Notification Dropdown Items -->
+        </li><!-- End Notification Nav -->
+        <li class="nav-item dropdown pe-3">
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+      </ul>
+    </nav><!-- End Icons Navigation -->
+  </header><!-- End Header -->
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'trangchu' %}">
+          <i class="bi bi-grid"></i>
+          <span>Trang chủ</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Khách hàng</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'themkhachhang' %}">
+              <i class="bi bi-circle"></i><span>Thêm khách hàng</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'khachhangchamsoc' %}">
+              <i class="bi bi-circle"></i><span>Khách hàng chăm sóc</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'khachhangsapky' %}">
+              <i class="bi bi-circle"></i><span>Khách hàng sắp ký</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'khachhangdaky' %}">
+              <i class="bi bi-circle"></i><span>Khách hàng đã ký</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'khachhangloaibo' %}">
+              <i class="bi bi-circle"></i><span>Khách hàng loại bỏ</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>Giải pháp</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'up' %}">
+              <i class="bi bi-circle"></i><span>Tải lên kiến thức</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'lesson_list' %}">
+              <i class="bi bi-circle"></i><span>Danh sách kiến thức</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'up_kn' %}">
+              <i class="bi bi-circle"></i><span>Tải lên kỹ năng</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'lesson_list_kn' %}">
+              <i class="bi bi-circle"></i><span>Kỹ năng</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>Giải pháp</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Forms Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-bar-chart"></i><span>Bổ sung</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'select_receiver' %}">
+              <i class="bi bi-circle"></i><span>Chat</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'congtyBH' %}">
+              <i class="bi bi-circle"></i><span>Công ty bảo hiểm</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'add_taikhoan' %}">
+              <i class="bi bi-circle"></i><span>Tài khoản khách hàng</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'list_taikhoans' %}">
+              <i class="bi bi-circle"></i><span>Danh sách tài khoản</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Charts Nav -->
+    </ul>
+  </aside><!-- End Sidebar-->
+  {% block content %}
+  {% endblock %}
+  <div id="loading-overlay" style="display: none;">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Cady</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Designed by <a href="https://bootstrapmade.com/">Cady</a>
+    </div>
+  </footer><!-- End Footer -->
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <script src="{% static 'assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/chart.js/chart.umd.js' %}"></script>
+  <script src="{% static 'assets/vendor/echarts/echarts.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/simple-datatables/simple-datatables.js' %}"></script>
+  <script src="{% static 'assets/vendor/tinymce/tinymce.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.7.0/pptxgen.min.js"></script>
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+  <!-- <script>document.addEventListener("DOMContentLoaded", function() {
+    // Show loading overlay when any form is submitted
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Ngăn chặn hành động submit mặc định
+            document.getElementById('loading-overlay').style.display = 'flex';
+
+            // Giả lập một khoảng thời gian 2 giây để loading
+            setTimeout(() => {
+                form.submit(); // Gửi form sau 2 giây
+            }, 2000); // 2000 milliseconds = 2 seconds
+        });
+    });
+});
+
+</script> -->
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% extends 'base_user.html' %}
+{% block content %}
+
+ <main id="main" class="main" style="height: 100%;">
+
+    <div class="pagetitle">
+      <button type="button" class="btn btn-primary mb-2">
+        <a href="" class="btn btn-primary">Tin mới</a>
+      </button>
+      <div class="col-sm-10"> 
+      </div>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      {% for news in news_list %}
+      <div >
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ news.title }}</h5>
+              <p>{{ news.content }}</p>
+
+              <!-- Slides only carousel -->
+              <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    {% if news.is_image %}
+                      <img src="{{ news.media.url }}" alt="{{ news.title }}" width="300" class="d-block w-100">
+                    {% elif news.is_video %}
+                      <video width="300" controls class="d-block w-100">
+                          <source src="{{ news.media.url }}" type="video/mp4">
+                      </video>
+                    {% endif %}
+                  </div>
+                </div>
+              </div><!-- End Slides only carousel-->
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+{% endblock %}

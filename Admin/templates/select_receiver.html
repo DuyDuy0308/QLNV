@@ -1,0 +1,64 @@
+{% extends 'base_manage.html' %}
+
+{% block content %}
+<main id="main" class="main">
+    <h2>Chọn người muốn nhắn</h2>
+    
+    <div class="user-list">
+        <ul>
+            {% for user in users %}
+                <li class="user-item">
+                    <a href="{% url 'chat_view' receiver_id=user.id %}" class="user-link">
+                        {{ user.tai_khoan }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</main>
+
+<style>
+    #main {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .user-list {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .user-item {
+        list-style-type: none;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .user-item:hover {
+        background-color: #e0e7ff; /* Màu nền khi hover */
+    }
+
+    .user-link {
+        display: block;
+        padding: 15px;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .user-link:hover {
+        color: #1d4ed8; /* Màu chữ khi hover */
+    }
+</style>
+{% endblock %}
