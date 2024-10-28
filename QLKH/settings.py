@@ -13,6 +13,7 @@ from decouple import config
 from pathlib import Path
 import dj_database_url
 import os
+import django_heroku
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -89,7 +90,7 @@ WSGI_APPLICATION = 'QLKH.wsgi.application'
 #     }
 # }
 DATABASES = {
-    'default': dj_database_url.config(default='mysql://root:@localhost:3306/QLKH4')
+   'default': dj_database_url.config(default=os.environ.get('CLEARDB_DATABASE_URL'))
 }
 
 # Password validation
@@ -134,3 +135,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+django_heroku.settings(locals())
