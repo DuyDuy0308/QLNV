@@ -76,21 +76,18 @@ WSGI_APPLICATION = 'QLKH.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'QLKH4',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'khanhgi663.mysql.pythonanywhere-services.com',
-#         'PORT': '3306',
-#         'OPTIONS': {
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#         },
-#     }
-# }
 DATABASES = {
-   'default': dj_database_url.config(default=os.environ.get('CLEARDB_DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_NAME', 'qlkh4'),
+        'USER': os.environ.get('DB_USER', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),  # Thay đổi nếu cần
+        'PORT': os.environ.get('DB_PORT', '3306'),  # Port mặc định cho MySQL
+    }
+}
+DATABASES = {
+    'default': dj_database_url.config(default=os.environ.get('JAWSDB_URL'))
 }
 
 # Password validation
@@ -127,8 +124,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'  # Đường dẫn cho file media
+STATIC_URL = 'Admin/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = 'media/'  # Đường dẫn cho file media
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -136,7 +135,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 django_heroku.settings(locals())
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  
-]
